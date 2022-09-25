@@ -51,6 +51,8 @@ fn_nvm() {
 		echo_yellow_blink "nvm installed successfully"
 		nvm install --lts
 		npm i -g yarn
+		npm install -g parcel-bundler
+		npm install -g typescript
 	fi
 }
 
