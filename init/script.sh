@@ -20,11 +20,24 @@ echo_yellow_blink() {
 	echo -e ${BOLD}${FG_YELLOW}${str}${RESET}
 }
 
+fn_reset() {
+	touch $HOME/.reset
+	touch $HOME/.reset_library
+	pkill loginwindow
+}
+
 fn_export() {
 	export GOINFRE="/goinfre/${USER}"
 	export ZSH="${GOINFRE}/.oh-my-zsh"
 	BREW_DIR="${GOINFRE}/.brew"
 	APPLICATION="$GOINFRE/Applications"
+}
+
+fn_copy_config() {
+	CONFIG_DIR="$GOINFRE/setting/config"
+	cp $CONFIG_DIR/gitconfig $HOME/.gitconfig
+	cp $CONFIG_DIR/vimrc $HOME/.vimrc
+	cp $CONFIG_DIR/zshrc $HOME/.zshrc
 }
 
 fn_ohmyzsh() {
@@ -95,6 +108,7 @@ fn_brew_install_cask() {
 
 fn_main() {
 	fn_export
+	fn_copy_config
 
 	if [ $1 = "--help" ]
 	then
@@ -102,9 +116,7 @@ fn_main() {
 		echo_yellow_blink "oh-my-zsh: setup"
 	elif [ $1 = "reset" ]
 	then
-		touch $HOME/.reset
-		touch $HOME/.reset_library
-		pkill loginwindow
+		fn_reset
 	elif [ $1 = "all" ]
 	then
 		fn_ohmyzsh
@@ -117,6 +129,7 @@ fn_main() {
 		fn_ohmyzsh
 	elif [ $1 = "nvm"]
 	then
+		fn_copy_config
 		fn_nvm
 	elif [ $1 = "brew"]
 	then
