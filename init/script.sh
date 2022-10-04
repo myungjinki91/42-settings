@@ -124,22 +124,26 @@ fn_main() {
 		fn_brew
 		fn_brew_install_cask "visual-studio-code"
 		fn_brew_install_cask "postman"
-	elif [ $1 = "oh-my-zsh"]
+		fn_brew_install_cask "firefox"
+	elif [ $1 = "oh-my-zsh" ]
 	then
 		fn_ohmyzsh
-	elif [ $1 = "nvm"]
+	elif [ $1 = "nvm" ]
 	then
 		fn_copy_config
 		fn_nvm
-	elif [ $1 = "brew"]
+	elif [ $1 = "brew" ]
 	then
 		fn_brew
-	elif [ $1 = "visual-studio-code"]
+	elif [ $1 = "visual-studio-code" ]
 	then
 		fn_brew_install_cask "visual-studio-code"
-	elif [ $1 = "postman"]
+	elif [ $1 = "postman" ]
 	then
 		fn_brew_install_cask "postman"
+	elif [ $1 = "firefox" ]
+   	then
+		fn_brew_install_cask "firefox"
 	fi
 	return 0
 }
