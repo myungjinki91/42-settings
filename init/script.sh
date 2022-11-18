@@ -109,8 +109,8 @@ fn_brew_install_pyenv() {
 		echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
 		echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 		source ~/.zshrc
-		pyenv install 3.11
-		pyenv global 3.11
+		pyenv install 3.7.13
+		pyenv global 3.7.13
 		echo_yellow_blink "pyenv installed successfully"
 	fi
 }
