@@ -30,7 +30,9 @@ fn_export() {
 	export GOINFRE="/goinfre/${USER}"
 	export ZSH="${GOINFRE}/.oh-my-zsh"
 	BREW_DIR="${GOINFRE}/.brew"
-	APPLICATION="$GOINFRE/Applications"
+	APPLICATION="${GOINFRE}/Applications"
+	GH_DIR=${BREW_DIR}/Cellar/gh
+	PYENV_DIR=${BREW_DIR}/Cellar/pyenv
 }
 
 fn_copy_config() {
@@ -70,7 +72,6 @@ fn_nvm() {
 }
 
 fn_brew() {
-
 	if [[ "${PATH}" != *brew* ]]
 	then
 		export "PATH=${GOINFRE}/.brew/bin:${PATH}"
@@ -84,6 +85,33 @@ fn_brew() {
 	else
 		rm -rf $GOINFRE/.brew && git clone --depth=1 https://github.com/Homebrew/brew $GOINFRE/.brew && brew update
 		echo_yellow_blink "brew installed successfully"
+	fi
+}
+
+fn_brew_install_gh() {
+	if [ -d ${GH_DIR} ]
+	then
+		echo_yellow_blink "gh is already installed"
+	else
+		brew install gh
+		echo_yellow_blink "gh installed successfully"
+	fi
+}
+
+fn_brew_install_pyenv() {
+	if [ -d ${PYENV_DIR} ]
+	then
+		echo_yellow_blink "pyenv is already installed"
+	else
+		brew install pyenv
+		mv $HOME/.pyenv $GOINFRE
+		echo 'export PYENV_ROOT="$GOINFRE/.pyenv"' >> ~/.zshrc
+		echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+		echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+		source ~/.zshrc
+		pyenv install 3.11
+		pyenv global 3.11
+		echo_yellow_blink "pyenv installed successfully"
 	fi
 }
 
@@ -122,7 +150,8 @@ fn_main() {
 		fn_ohmyzsh
 		fn_nvm
 		fn_brew
-		brew install gh
+		fn_brew_install_gh
+		fn_brew_install_pyenv
 		fn_brew_install_cask "visual-studio-code"
 		fn_brew_install_cask "postman"
 		fn_brew_install_cask "firefox"
