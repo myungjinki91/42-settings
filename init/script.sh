@@ -14,10 +14,16 @@ BG_YELLOW="${CSI}43m"
 FG_BG_YELLOW="${CSI}33;43m"
 FG_BG_DEFAULT="${CSI}39;49m"
 
-echo_yellow_blink() {
+echo_yellow() {
 	local str=$1
 
 	echo -e ${BOLD}${FG_YELLOW}${str}${RESET}
+}
+
+echo_yellow_blink() {
+	local str=$1
+
+	echo -e ${BLINK}${FG_YELLOW}${str}${RESET}
 }
 
 fn_reset() {
@@ -45,7 +51,7 @@ fn_copy_config() {
 fn_ohmyzsh() {
 	if [ -d ${GOINFRE}/.oh-my-zsh ]
 	then
-		echo_yellow_blink "oh-my-zsh is already installed"
+		echo_yellow "oh-my-zsh is already installed"
 	else
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 		soucre ~/.zshrc
@@ -55,7 +61,7 @@ fn_ohmyzsh() {
 fn_nvm() {
 	if [ -d ${GOINFRE}/.nvm ]
 	then
-		echo_yellow_blink "nvm is already installed"
+		echo_yellow "nvm is already installed"
 	else
 		NVM_DIR="${GOINFRE}/.nvm"
 		export NVM_DIR=${NVM_DIR}
@@ -63,7 +69,7 @@ fn_nvm() {
 		mkdir -p ${NVM_DIR}
 		sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh)"
 		source ${HOME}/.zshrc
-		echo_yellow_blink "nvm installed successfully"
+		echo_yellow "nvm installed successfully"
 		nvm install --lts
 		npm i -g yarn
 		npm install -g parcel-bundler
@@ -75,40 +81,40 @@ fn_brew() {
 	if [[ "${PATH}" != *brew* ]]
 	then
 		export "PATH=${GOINFRE}/.brew/bin:${PATH}"
-		echo_yellow_blink "$BREW_DIR/bin is added in PATH"
-		echo_yellow_blink "PATH=$PATH"
+		echo_yellow "$BREW_DIR/bin is added in PATH"
+		echo_yellow "PATH=$PATH"
 	fi
 
 	if [ -d ${BREW_DIR} ]
 	then
-		echo_yellow_blink "brew is already installed"
+		echo_yellow "brew is already installed"
 	else
 		rm -rf $GOINFRE/.brew && git clone --depth=1 https://github.com/Homebrew/brew $GOINFRE/.brew && brew update
-		echo_yellow_blink "brew installed successfully"
+		echo_yellow "brew installed successfully"
 	fi
 }
 
 fn_brew_install_gh() {
 	if [ -d ${GH_DIR} ]
 	then
-		echo_yellow_blink "gh is already installed"
+		echo_yellow "gh is already installed"
 	else
 		brew install gh
-		echo_yellow_blink "gh installed successfully"
+		echo_yellow "gh installed successfully"
 	fi
 }
 
 fn_brew_install_pyenv() {
 	if [ -d ${PYENV_DIR} ]
 	then
-		echo_yellow_blink "pyenv is already installed"
+		echo_yellow "pyenv is already installed"
 	else
 		brew install pyenv
 		mv $HOME/.pyenv $GOINFRE
 		source ~/.zshrc
 		pyenv install 3.7.13
 		pyenv global 3.7.13
-		echo_yellow_blink "pyenv installed successfully"
+		echo_yellow "pyenv installed successfully"
 		python -m pip install --upgrade pip
 		python -m pip install jupyter
 	fi
@@ -126,24 +132,22 @@ fn_brew_install_cask() {
 
 	if [ -d ${BREW_DIR}/Caskroom/$cask ]
 	then
-		echo_yellow_blink "$cask is already installed"
+		echo_yellow "$cask is already installed"
 	else
 		brew install --cask "${cask}" --appdir "$APPLICATION"
-		echo_yellow_blink "${cask} installed successfully"
+		echo_yellow "${cask} installed successfully"
 	fi
 }
 
-fn_github_clone() {
-	git clone https://github.com/newmki/Project-X-Search-1.git
-	git clone https://github.com/newmki/Project-X-Search-2.git
-	git clone https://github.com/newmki/Project-X-Search-3.git
-	git clone https://github.com/newmki/Project-X-Search-4.git
-	git clone https://github.com/newmki/Project-X-Search-5.git
-	git clone http://repo.codereview.online/mki42/Search-01.git
-	git clone http://repo.codereview.online/mki42/Search-02.git
-	git clone http://repo.codereview.online/mki42/Search-03.git
-	git clone http://repo.codereview.online/mki42/Search-04.git
-	git clone http://repo.codereview.online/mki42/Search-05.git
+fn_gitlab_projext_x_clone() {
+	if [ -d $GOINFRE/Project-X/$1 ]
+	then
+		echo_yellow "$1 is already installed"
+	else
+		mkdir -p $GOINFRE/Project-X/$1
+		git clone "http://repo.codereview.online/mki42/"$1".git" $GOINFRE/Project-X/$1
+		echo_yellow "$1 installed successfully"
+	fi
 }
 
 fn_main() {
@@ -152,8 +156,8 @@ fn_main() {
 
 	if [ $1 = "--help" ]
 	then
-		echo_yellow_blink "all: setup all"
-		echo_yellow_blink "oh-my-zsh: setup"
+		echo_yellow "all: setup all"
+		echo_yellow "oh-my-zsh: setup"
 	elif [ $1 = "reset" ]
 	then
 		fn_reset
@@ -168,7 +172,11 @@ fn_main() {
 		fn_brew_install_cask "postman"
 		fn_brew_install_cask "firefox"
 		fn_brew_install_cask "discord"
-		fn_github_clone
+		fn_gitlab_projext_x_clone "search-01"
+		fn_gitlab_projext_x_clone "search-02"
+		fn_gitlab_projext_x_clone "search-03"
+		fn_gitlab_projext_x_clone "search-04"
+		fn_gitlab_projext_x_clone "search-05"
 	elif [ $1 = "oh-my-zsh" ]
 	then
 		fn_ohmyzsh
@@ -194,7 +202,7 @@ fn_main() {
 
 if [ $# -eq 0 ]
 then
-	echo_yellow_blink "Usage: source script.sh [ --help | oh-my-zsh | .. ]"
+	echo_yellow "Usage: source script.sh [ --help | oh-my-zsh | .. ]"
 	return 1
 else
 	fn_main $1
