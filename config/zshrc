@@ -100,10 +100,18 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Path
+export PATH=/usr/local/bin:/usr/local/munki:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=/goinfre/mki/.pyenv/versions/3.7.13/bin:$PATH
+export PATH=/goinfre/mki/.brew/bin:$PATH
+export PATH=/goinfre/mki/.brew/Cellar:$PATH
+
+# NVM
 export NVM_DIR="/goinfre/mki/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-echo 'export PYENV_ROOT="$GOINFRE/.pyenv"' >> ~/.zshrc
-echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+# Pyenv
+export PYENV_ROOT="/goinfre/mki/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

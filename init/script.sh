@@ -105,9 +105,6 @@ fn_brew_install_pyenv() {
 	else
 		brew install pyenv
 		mv $HOME/.pyenv $GOINFRE
-		echo 'export PYENV_ROOT="$GOINFRE/.pyenv"' >> ~/.zshrc
-		echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-		echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 		source ~/.zshrc
 		pyenv install 3.7.13
 		pyenv global 3.7.13
@@ -155,6 +152,7 @@ fn_main() {
 		fn_brew_install_cask "visual-studio-code"
 		fn_brew_install_cask "postman"
 		fn_brew_install_cask "firefox"
+		fn_brew_install_cask "discord"
 	elif [ $1 = "oh-my-zsh" ]
 	then
 		fn_ohmyzsh
