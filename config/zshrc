@@ -1,11 +1,12 @@
 export GOINFRE="/goinfre/mki"
 export SETTING_DIR=$GOINFRE/setting
+export INIT_DIR = $SETTING_DIR/init
 
 if [ -d $GOINFRE/setting ]
 then
 else
-    https://github.com/newmki/setting
-    export INIT_DIR = $SETTING_DIR/init
+	mkdir -p $GOINFRE/setting
+   	git clone https://github.com/newmki/setting $GOINFRE/setting
     if [ -d $GOINFRE/.oh-my-zsh ]
     then
     else
