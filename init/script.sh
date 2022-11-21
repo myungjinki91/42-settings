@@ -133,6 +133,19 @@ fn_brew_install_cask() {
 	fi
 }
 
+fn_github_clone() {
+	git clone https://github.com/newmki/Project-X-Search-1.git
+	git clone https://github.com/newmki/Project-X-Search-2.git
+	git clone https://github.com/newmki/Project-X-Search-3.git
+	git clone https://github.com/newmki/Project-X-Search-4.git
+	git clone https://github.com/newmki/Project-X-Search-5.git
+	git clone http://repo.codereview.online/mki42/Search-01.git
+	git clone http://repo.codereview.online/mki42/Search-02.git
+	git clone http://repo.codereview.online/mki42/Search-03.git
+	git clone http://repo.codereview.online/mki42/Search-04.git
+	git clone http://repo.codereview.online/mki42/Search-05.git
+}
+
 fn_main() {
 	fn_export
 	fn_copy_config
@@ -155,6 +168,7 @@ fn_main() {
 		fn_brew_install_cask "postman"
 		fn_brew_install_cask "firefox"
 		fn_brew_install_cask "discord"
+		fn_github_clone
 	elif [ $1 = "oh-my-zsh" ]
 	then
 		fn_ohmyzsh
