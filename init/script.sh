@@ -109,6 +109,8 @@ fn_brew_install_pyenv() {
 		pyenv install 3.7.13
 		pyenv global 3.7.13
 		echo_yellow_blink "pyenv installed successfully"
+		python -m pip install --upgrade pip
+		python -m pip install jupyter
 	fi
 }
 
