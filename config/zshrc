@@ -1,6 +1,6 @@
 export GOINFRE="/goinfre/mki"
 export SETTING_DIR=$GOINFRE/setting
-export INIT_DIR = $SETTING_DIR/init
+export INIT_DIR=$SETTING_DIR/init
 
 if [ -d $GOINFRE/setting ]
 then
