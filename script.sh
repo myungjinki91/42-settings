@@ -1,4 +1,5 @@
 #!/bin/sh
+# https://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
 # Run "source scrit.sh"
 
 # color
@@ -16,67 +17,23 @@ FG_BG_DEFAULT="${CSI}39;49m"
 
 echo_yellow() {
 	local str=$1
-
 	echo -e ${BOLD}${FG_YELLOW}${str}${RESET}
 }
 
 echo_yellow_blink() {
 	local str=$1
-
 	echo -e ${BLINK}${FG_YELLOW}${str}${RESET}
 }
 
-fn_reset() {
-	touch $HOME/.reset
-	touch $HOME/.reset_library
-	pkill loginwindow
-}
+export GOINFRE="/goinfre/${USER}"
+BREW_DIR="${GOINFRE}/.brew"
+APPLICATION="${GOINFRE}/Applications"
+GH_DIR=${BREW_DIR}/Cellar/gh
+CONFIG_DIR="$GOINFRE/setting/config"
+PYENV_DIR=${BREW_DIR}/Cellar/pyenv
+export PYENV_ROOT="${GOINFRE}/.pyenv"
 
-fn_export() {
-	export GOINFRE="/goinfre/${USER}"
-	export ZSH="${GOINFRE}/.oh-my-zsh"
-	BREW_DIR="${GOINFRE}/.brew"
-	APPLICATION="${GOINFRE}/Applications"
-	GH_DIR=${BREW_DIR}/Cellar/gh
-	PYENV_DIR=${BREW_DIR}/Cellar/pyenv
-}
-
-fn_copy_config() {
-	CONFIG_DIR="$GOINFRE/setting/config"
-	cp $CONFIG_DIR/gitconfig $HOME/.gitconfig
-	cp $CONFIG_DIR/vimrc $HOME/.vimrc
-	cp $CONFIG_DIR/zshrc $HOME/.zshrc
-}
-
-fn_ohmyzsh() {
-	if [ -d ${GOINFRE}/.oh-my-zsh ]
-	then
-		echo_yellow "oh-my-zsh is already installed"
-	else
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-		soucre ~/.zshrc
-	fi
-}
-
-fn_nvm() {
-	if [ -d ${GOINFRE}/.nvm ]
-	then
-		echo_yellow "nvm is already installed"
-	else
-		NVM_DIR="${GOINFRE}/.nvm"
-		export NVM_DIR=${NVM_DIR}
-		rm -rf ${NVM_DIR}
-		mkdir -p ${NVM_DIR}
-		sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh)"
-		source ${HOME}/.zshrc
-		echo_yellow "nvm installed successfully"
-		nvm install --lts
-		npm i -g yarn
-		npm install -g parcel-bundler
-		npm install -g typescript
-	fi
-}
-
+# https://docs.brew.sh/Installation
 fn_brew() {
 	if [[ "${PATH}" != *brew* ]]
 	then
@@ -89,34 +46,44 @@ fn_brew() {
 	then
 		echo_yellow "brew is already installed"
 	else
-		rm -rf $GOINFRE/.brew && git clone --depth=1 https://github.com/Homebrew/brew $GOINFRE/.brew && brew update
+		echo_yellow "brew is installing..."
+		rm -rf $BREW_DIR
+		git clone --depth=1 https://github.com/Homebrew/brew $BREW_DIR
+		eval "$($BREW_DIR/bin/brew shellenv)"
+		brew update --force --quiet
+		chmod -R go-w "$(brew --prefix)/share/zsh"
 		echo_yellow "brew installed successfully"
 	fi
 }
 
-fn_brew_install_gh() {
+# https://github.com/pyenv/pyenv
+fn_brew_pyenv() {
+	if [ -d ${PYENV_DIR} ]
+	then
+		echo_yellow "pyenv is already installed"
+	else
+		echo_yellow "pyenv is installing..."
+		rm -rf $BREW_DIR
+		brew install xz
+		brew install pyenv
+		mv $HOME/.pyenv ${PYENV_ROOT}
+
+		command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+		eval "$(pyenv init -)"
+
+		pyenv install 3.11
+		pyenv global 3.11
+		echo_yellow "pyenv installed successfully"
+	fi
+}
+
+fn_brew_gh() {
 	if [ -d ${GH_DIR} ]
 	then
 		echo_yellow "gh is already installed"
 	else
 		brew install gh
 		echo_yellow "gh installed successfully"
-	fi
-}
-
-fn_brew_install_pyenv() {
-	if [ -d ${PYENV_DIR} ]
-	then
-		echo_yellow "pyenv is already installed"
-	else
-		brew install pyenv
-		mv $HOME/.pyenv $GOINFRE
-		source ~/.zshrc
-		pyenv install 3.7.13
-		pyenv global 3.7.13
-		echo_yellow "pyenv installed successfully"
-		python -m pip install --upgrade pip
-		python -m pip install jupyter
 	fi
 }
 
@@ -139,54 +106,65 @@ fn_brew_install_cask() {
 	fi
 }
 
-fn_gitlab_projext_x_clone() {
-	if [ -d $GOINFRE/Project-X/$1 ]
+fn_nvm() {
+	export NVM_DIR="${GOINFRE}/.nvm"
+
+	if [ -d ${GOINFRE}/.nvm ]
 	then
-		echo_yellow "$1 is already installed"
+		echo_yellow "nvm is already installed"
 	else
-		mkdir -p $GOINFRE/Project-X/$1
-		git clone "http://repo.codereview.online/mki42/"$1".git" $GOINFRE/Project-X/$1
-		echo_yellow "$1 installed successfully"
+		rm -rf ${NVM_DIR}
+		mkdir -p ${NVM_DIR}
+		sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh)"
+		source ${HOME}/.zshrc
+		echo_yellow "nvm installed successfully"
+		nvm install --lts
+		npm i -g yarn
+		npm install -g parcel-bundler
+		npm install -g typescript
 	fi
 }
 
-fn_main() {
-	fn_export
-	fn_copy_config
+fn_reset() {
+	touch $HOME/.reset
+	touch $HOME/.reset_library
+	# pkill loginwindow
+}
 
+fn_all() {
+	echo_yellow "source script.sh all"
+	fn_brew
+	fn_brew_pyenv
+}
+
+fn_clean() {
+	echo_yellow "source script.sh clean"
+	rm -rf ${BREW_DIR}
+	rm -rf ${PYENV_ROOT}
+}
+
+fn_fclean() {
+	echo_yellow "source script.sh fclean"
+	fn_clean
+}
+
+fn_re() {
+	echo_yellow "source script.sh re"
+	fn_fclean && fn_all
+}
+
+fn_main() {
 	if [ $1 = "--help" ]
 	then
-		echo_yellow "all: setup all"
-		echo_yellow "oh-my-zsh: setup"
-	elif [ $1 = "reset" ]
-	then
-		fn_reset
-	elif [ $1 = "all" ]
-	then
-		fn_ohmyzsh
-		fn_nvm
-		fn_brew
-		fn_brew_install_gh
-		fn_brew_install_pyenv
-		fn_brew_install_cask "visual-studio-code"
-		fn_brew_install_cask "postman"
-		fn_brew_install_cask "firefox"
-		fn_brew_install_cask "discord"
-		fn_gitlab_projext_x_clone "search-01"
-		fn_gitlab_projext_x_clone "search-02"
-		fn_gitlab_projext_x_clone "search-03"
-		fn_gitlab_projext_x_clone "search-04"
-		fn_gitlab_projext_x_clone "search-05"
-	elif [ $1 = "oh-my-zsh" ]
-	then
-		fn_ohmyzsh
-	elif [ $1 = "nvm" ]
-	then
-		fn_copy_config
-		fn_nvm
+		echo_yellow "source script.sh settings"
+		echo_yellow "source script.sh brew"
+		echo_yellow "source script.sh pyenv"
 	elif [ $1 = "brew" ]
 	then
 		fn_brew
+	elif [ $1 = "pyenv" ]
+	then
+		fn_brew_pyenv
 	elif [ $1 = "visual-studio-code" ]
 	then
 		fn_brew_install_cask "visual-studio-code"
@@ -196,13 +174,28 @@ fn_main() {
 	elif [ $1 = "firefox" ]
    	then
 		fn_brew_install_cask "firefox"
+	elif [ $1 = "nvm" ]
+	then
+		fn_nvm
+	elif [ $1 = "all" ]
+	then
+		fn_all
+	elif [ $1 = "clean" ]
+	then
+		fn_clean
+	elif [ $1 = "fclean" ]
+	then
+		fn_fclean
+	elif [ $1 = "re" ]
+	then
+		fn_re
 	fi
 	return 0
 }
 
 if [ $# -eq 0 ]
 then
-	echo_yellow "Usage: source script.sh [ --help | oh-my-zsh | .. ]"
+	echo_yellow "Usage: source script.sh --help"
 	return 1
 else
 	fn_main $1
