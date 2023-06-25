@@ -31,6 +31,11 @@ APPLICATION="${GOINFRE}/Applications"
 GH_DIR=${BREW_DIR}/Cellar/gh
 CONFIG_DIR="$GOINFRE/setting/config"
 
+fn_42toolbox() {
+	rm -rf ${GOINFRE}/42toolbox
+	git clone https://github.com/alexandregv/42toolbox.git ${GOINFRE}/42toolbox
+}
+
 # https://docs.brew.sh/Installation
 fn_brew() {
 	if [[ "${PATH}" != *brew* ]]
@@ -151,15 +156,20 @@ fn_fclean() {
 
 fn_re() {
 	echo_yellow "source script.sh re"
-	fn_fclean && fn_all
+	fn_fclean
+	fn_all
 }
 
 fn_main() {
+	cat ./README.md
 	if [ $1 = "--help" ]
 	then
 		echo_yellow "source script.sh settings"
 		echo_yellow "source script.sh brew"
 		echo_yellow "source script.sh pyenv"
+	elif [ $1 = "42toolbox" ]
+	then
+		fn_42toolbox
 	elif [ $1 = "brew" ]
 	then
 		fn_brew
