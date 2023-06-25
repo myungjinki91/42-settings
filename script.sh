@@ -149,6 +149,13 @@ fn_clean() {
 	rm -rf ${PYENV_ROOT}
 }
 
+fn_clean_cache() {
+	rm -rf ${HOME}/Library/Application Support/Slack
+	rm -rf ${HOME}/Library/Application Support/Google/Chrome
+	rm -rf ${HOME}/Library/Caches/Google
+	rm -rf ${HOME}/Library/Caches/com.google.SoftwareUpdate
+}
+
 fn_fclean() {
 	echo_yellow "source script.sh fclean"
 	fn_clean
