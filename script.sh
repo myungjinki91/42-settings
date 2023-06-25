@@ -30,8 +30,6 @@ BREW_DIR="${GOINFRE}/.brew"
 APPLICATION="${GOINFRE}/Applications"
 GH_DIR=${BREW_DIR}/Cellar/gh
 CONFIG_DIR="$GOINFRE/setting/config"
-PYENV_DIR=${BREW_DIR}/Cellar/pyenv
-export PYENV_ROOT="${GOINFRE}/.pyenv"
 
 # https://docs.brew.sh/Installation
 fn_brew() {
@@ -58,21 +56,24 @@ fn_brew() {
 
 # https://github.com/pyenv/pyenv
 fn_brew_pyenv() {
-	if [ -d ${PYENV_DIR} ]
+	PYENV_DIR=${BREW_DIR}/Cellar/pyenv
+	export PYENV_ROOT="${GOINFRE}/.pyenv"
+
+	if [ -d ${PYENV_ROOT} ]
 	then
 		echo_yellow "pyenv is already installed"
 	else
 		echo_yellow "pyenv is installing..."
-		rm -rf $BREW_DIR
+		rm -rf $PYENV_ROOT
 		brew install xz
 		brew install pyenv
 		mv $HOME/.pyenv ${PYENV_ROOT}
 
-		command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-		eval "$(pyenv init -)"
-
 		pyenv install 3.11
 		pyenv global 3.11
+
+		command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+		eval "$(pyenv init -)"
 		echo_yellow "pyenv installed successfully"
 	fi
 }
