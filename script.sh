@@ -31,6 +31,12 @@ APPLICATION="${GOINFRE}/Applications"
 GH_DIR=${BREW_DIR}/Cellar/gh
 CONFIG_DIR="$GOINFRE/setting/config"
 
+fn_goinfre() {
+	echo_yellow "fn_goinfre"
+	mkdir -p /goinfre/mki
+	ln -s /goinfre/mki ${HOME}/goinfre
+}	
+
 fn_42toolbox() {
 	rm -rf ${GOINFRE}/42toolbox
 	git clone https://github.com/alexandregv/42toolbox.git ${GOINFRE}/42toolbox
@@ -169,6 +175,7 @@ fn_re() {
 
 fn_main() {
 	cat ./README.md
+	fn_goinfre
 	if [ $1 = "--help" ]
 	then
 		echo_yellow "source script.sh settings"
