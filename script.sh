@@ -174,8 +174,6 @@ fn_re() {
 }
 
 fn_main() {
-	cat ./README.md
-	fn_goinfre
 	if [ $1 = "--help" ]
 	then
 		echo_yellow "source script.sh settings"
@@ -190,6 +188,9 @@ fn_main() {
 	elif [ $1 = "pyenv" ]
 	then
 		fn_brew_pyenv
+	elif [ $1 = "cask" ]
+	then
+		fn_brew_install_cask $2
 	elif [ $1 = "visual-studio-code" ]
 	then
 		fn_brew_install_cask "visual-studio-code"
@@ -204,6 +205,7 @@ fn_main() {
 		fn_nvm
 	elif [ $1 = "all" ]
 	then
+		fn_goinfre
 		fn_all
 	elif [ $1 = "clean" ]
 	then
@@ -223,6 +225,6 @@ then
 	echo_yellow "Usage: source script.sh --help"
 	return 1
 else
-	fn_main $1
+	fn_main $1 $2
 	return 0
 fi
