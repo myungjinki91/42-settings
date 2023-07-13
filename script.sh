@@ -149,6 +149,7 @@ fn_all() {
 	fn_brew
 	fn_brew_pyenv
 	fn_brew_install_cask "firefox"
+	fn_brew_install_cask "brave-browser"
 	fn_brew_install_cask "notion"
 }
 
