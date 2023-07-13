@@ -145,8 +145,11 @@ fn_reset() {
 
 fn_all() {
 	echo_yellow "source script.sh all"
+	fn_42toolbox
 	fn_brew
 	fn_brew_pyenv
+	fn_brew_install_cask "firefox"
+	fn_brew_install_cask "notion"
 }
 
 fn_clean() {
@@ -191,21 +194,14 @@ fn_main() {
 	elif [ $1 = "cask" ]
 	then
 		fn_brew_install_cask $2
-	elif [ $1 = "visual-studio-code" ]
-	then
-		fn_brew_install_cask "visual-studio-code"
-	elif [ $1 = "postman" ]
-	then
-		fn_brew_install_cask "postman"
-	elif [ $1 = "firefox" ]
-   	then
-		fn_brew_install_cask "firefox"
 	elif [ $1 = "nvm" ]
 	then
 		fn_nvm
-	elif [ $1 = "all" ]
+	elif [ $1 = "goinfre" ]
 	then
 		fn_goinfre
+	elif [ $1 = "all" ]
+	then
 		fn_all
 	elif [ $1 = "clean" ]
 	then
