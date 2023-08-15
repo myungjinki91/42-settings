@@ -150,7 +150,8 @@ fn_all() {
 	fn_brew_pyenv
 	fn_brew_install_cask "firefox"
 	fn_brew_install_cask "brave-browser"
-	fn_brew_install_cask "notion"
+    fn_brew_install_cask "google-chrome"
+    fn_brew_install_cask "obsidian"
 }
 
 fn_clean() {
