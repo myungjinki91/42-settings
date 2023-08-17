@@ -153,6 +153,7 @@ fn_all() {
     fn_brew_install_cask "google-chrome"
     fn_brew_install_cask "obsidian"
     fn_brew_install_cask "postman"
+    fn_brew_install_cask "slack"
 }
 
 fn_clean() {
