@@ -147,13 +147,9 @@ fn_all() {
 	echo_yellow "source script.sh all"
 	fn_42toolbox
 	fn_brew
-	fn_brew_pyenv
-	fn_brew_install_cask "firefox"
-	fn_brew_install_cask "brave-browser"
     fn_brew_install_cask "google-chrome"
-    fn_brew_install_cask "obsidian"
     fn_brew_install_cask "postman"
-    fn_brew_install_cask "slack"
+	fn_brew_pyenv
 }
 
 fn_clean() {
