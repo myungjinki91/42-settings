@@ -131,10 +131,24 @@ fn_nvm() {
 		source ${HOME}/.zshrc
 		echo_yellow "nvm installed successfully"
 		nvm install --lts
+		echo_yellow "node lts installed successfully"
 		npm i -g yarn
 		npm install -g parcel-bundler
 		npm install -g typescript
 	fi
+}
+
+fn_sdkman() {
+    export SDKMAN_DIR="${GOINFRE}/.sdkman"
+
+	if [ -d ${GOINFRE}/.sdkman ]
+	then
+		echo_yellow "sdkman is already installed"
+	else
+        rm -rf ${SDKMAN_DIR}
+        curl -s "https://get.sdkman.io" | bash
+        source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    fi
 }
 
 fn_reset() {
@@ -150,6 +164,8 @@ fn_all() {
     fn_brew_install_cask "google-chrome"
     fn_brew_install_cask "postman"
 	fn_brew_pyenv
+    fn_nvm
+    fn_sdkman
 }
 
 fn_clean() {
@@ -194,6 +210,9 @@ fn_main() {
 	elif [ $1 = "cask" ]
 	then
 		fn_brew_install_cask $2
+	elif [ $1 = "sdkman" ]
+	then
+		fn_sdkman
 	elif [ $1 = "nvm" ]
 	then
 		fn_nvm
