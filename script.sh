@@ -162,9 +162,9 @@ fn_all() {
 	fn_42toolbox
 	fn_brew
     fn_brew_install_cask "google-chrome"
-    fn_brew_install_cask "postman"
     fn_brew_install_cask "visual-studio-code"
-    fn_brew_install_cask "pycharm"
+    # fn_brew_install_cask "postman"
+    # fn_brew_install_cask "pycharm"
 	# fn_brew_pyenv
     # fn_nvm
     # fn_sdkman
